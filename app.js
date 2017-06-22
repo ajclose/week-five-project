@@ -3,6 +3,8 @@ const app = express()
 const mustache = require('mustache-express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const fs = require('fs')
+const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 
 app.set('view engine', 'mustache')
 app.engine('mustache', mustache())
@@ -16,4 +18,10 @@ app.use(session({
 
 app.listen(3000, function() {
   console.log("App is live!")
+})
+
+app.get('/', function(req, res) {
+  res.render('index', {
+    words: words
+  })
 })
