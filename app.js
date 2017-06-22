@@ -21,7 +21,9 @@ app.listen(3000, function() {
 })
 
 app.get('/', function(req, res) {
+  const randomIndex = Math.floor(Math.random()*(words.length-1))
+  const word = words[randomIndex]
   res.render('index', {
-    words: words
+    word: word
   })
 })
