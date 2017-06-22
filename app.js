@@ -49,16 +49,22 @@ app.get('/', function(req, res) {
   })
 
 app.post('/checkguess', function(req, res) {
+  guessesLeft -= 1
   const guessLetter = req.body.letter
   const letters = word.split('')
   const updateGuess = guess.split('')
-  for (var i = 0; i < letters.length; i++) {
-    const letter = letters[i]
-    if (letter === guessLetter) {
-      updateGuess[i] = guessLetter
+  if (guessesLeft) {
+    for (var i = 0; i < letters.length; i++) {
+      const letter = letters[i]
+      if (letter === guessLetter) {
+        updateGuess[i] = guessLetter
+      }
     }
+
+    guess = updateGuess.join('')
+    res.redirect('/')
+  } else {
+    res.send("You're out of turns!")
   }
-  guessesLeft -= 1
-  guess = updateGuess.join('')
-  res.redirect('/')
+
 })
