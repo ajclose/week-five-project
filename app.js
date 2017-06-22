@@ -10,6 +10,7 @@ let sess;
 let guess;
 let word;
 let lettersGuessed = []
+let inWord = false
 
 function generateGuess(wordLength) {
   let guess = []
@@ -37,31 +38,36 @@ app.get('/', function(req, res) {
   sess = req.session
   if (!sess.word) {
       const randomIndex = Math.floor(Math.random()*(words.length-1))
-      word = words[randomIndex]
+      word = words[randomIndex].toUpperCase()
       sess.word = word
       guess = generateGuess(word.length)
   }
   res.render('index', {
       word: sess.word,
       guess: guess,
-      guessesLeft: guessesLeft
+      guessesLeft: guessesLeft,
+      lettersGuessed: lettersGuessed
     })
   })
 
 app.post('/checkguess', function(req, res) {
-  guessesLeft -= 1
-  const guessLetter = req.body.letter
+  const guessLetter = req.body.letter.toUpperCase()
+  lettersGuessed.push(guessLetter)
   const letters = word.split('')
-  const updateGuess = guess.split('')
+  const updateGuess = guess.split(' ')
   if (guessesLeft) {
     for (var i = 0; i < letters.length; i++) {
       const letter = letters[i]
       if (letter === guessLetter) {
         updateGuess[i] = guessLetter
+        inWord = true
       }
     }
-
-    guess = updateGuess.join('')
+    if (!inWord) {
+      guessesLeft -= 1
+    }
+    guess = updateGuess.join(' ')
+    inWord = false
     res.redirect('/')
   } else {
     res.send("You're out of turns!")
