@@ -12,13 +12,13 @@
         Mystery Word Game
       </h1>
       <h3 class="guesses-left">
-        You have guesses left
+        You have {{guessesLeft}} guesses left
       </h3>
       <div class="word-guess">
         {{word}}
         {{guess}}
       </div>
-      <form class="guess" action="index.html" method="post">
+      <form class="guess" action="/checkguess" method="post">
         <input type="text" name="letter" value="" placeholder="Enter your guess">
         <input type="submit" name="guess" value="Guess!">
       </form>

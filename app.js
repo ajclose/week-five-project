@@ -5,9 +5,11 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+let guessesLeft = 8
 let sess;
 let guess;
 let word;
+let lettersGuessed = []
 
 function generateGuess(wordLength) {
   let guess = []
@@ -41,7 +43,20 @@ app.get('/', function(req, res) {
   }
   res.render('index', {
       word: sess.word,
-      guess: guess
+      guess: guess,
+      guessesLeft: guessesLeft
     })
-
   })
+
+app.post('/checkguess', function(req, res) {
+  const guessLetter = req.body.letter
+  console.log(guessLetter);
+  const letters = word.split()
+  // for (var i = 0; i < letters.length; i++) {
+  //   const letter = letters[i]
+  //   if (letter) {
+  //
+  //   }
+  // }
+  res.redirect('/')
+})
