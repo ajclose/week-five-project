@@ -6,7 +6,23 @@
     <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
-    {{word}}
-    {{guess}}
+    <div class="container">
+      <div class="title">
+        Mystery Word Game
+      </div>
+      <div class="guesses-left">
+        You have guesses left
+      </div>
+      <div class="word-guess">
+
+      </div>
+      <form class="" action="index.html" method="post">
+        <input type="text" name="letter" value="" placeholder="Enter your guess">
+        <input type="submit" name="guess" value="Guess!">
+      </form>
+      <div class="guesses-letters">
+        Letters guessed: 
+      </div>
+    </div>
   </body>
 </html>
