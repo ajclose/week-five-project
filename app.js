@@ -6,6 +6,8 @@ const bodyParser = require('body-parser')
 const fs = require('fs')
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 let sess;
+let guess;
+let word;
 
 function generateGuess(wordLength) {
   let guess = []
@@ -31,11 +33,15 @@ app.listen(3000, function() {
 
 app.get('/', function(req, res) {
   sess = req.session
-  const randomIndex = Math.floor(Math.random()*(words.length-1))
-  const word = words[randomIndex]
-  const guess = generateGuess(word.length)
+  if (!sess.word) {
+      const randomIndex = Math.floor(Math.random()*(words.length-1))
+      word = words[randomIndex]
+      sess.word = word
+      guess = generateGuess(word.length)
+  }
   res.render('index', {
-    word: word,
-    guess: guess
+      word: sess.word,
+      guess: guess
+    })
+
   })
-})
