@@ -50,18 +50,15 @@ app.get('/', function(req, res) {
 
 app.post('/checkguess', function(req, res) {
   const guessLetter = req.body.letter
-  console.log(guessLetter);
   const letters = word.split('')
   const updateGuess = guess.split('')
   for (var i = 0; i < letters.length; i++) {
     const letter = letters[i]
-    console.log(letter);
     if (letter === guessLetter) {
-      console.log("letter is in word!");
       updateGuess[i] = guessLetter
-      console.log(updateGuess[i]);
     }
   }
+  guessesLeft -= 1
   guess = updateGuess.join('')
   res.redirect('/')
 })
