@@ -133,3 +133,10 @@ app.post('/checkguess', function(req, res) {
 }
     res.redirect('/')
 })
+
+app.get('/reset', function(req, res) {
+  sess = req.session
+  sess.word = ''
+  guessesLeft = 8
+  res.redirect('/')
+})
