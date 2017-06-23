@@ -51,7 +51,7 @@ app.get('/', function(req, res) {
         guess: guess,
         guessesLeft: guessesLeft,
         lettersGuessed: lettersGuessed,
-        errors: errors
+        errors: errors[0]
       })
   } else {
     res.render('index', {
@@ -66,9 +66,9 @@ app.get('/', function(req, res) {
 
 app.post('/checkguess', function(req, res) {
   const guessLetter = req.body.letter.toUpperCase()
-  req.checkBody('letter', 'Please enter 1 letter').len(1,1).isAlpha()
+  req.checkBody('letter', 'Please enter a letter').len(1,1).isAlpha()
   errors = req.validationErrors()
-  console.log(errors.msg);
+  console.log(errors[0].msg);
   lettersGuessed.push(guessLetter)
   const letters = word.split('')
   const updateGuess = guess.split(' ')
