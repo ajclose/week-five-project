@@ -19,9 +19,7 @@
         {{guess}}
       </div>
       <div class="message">
-        {{#errors}}
-        {{msg}}
-        {{/errors}}
+        {{displayMessage}}
       </div>
       <form class="guess" action="/checkguess" method="post">
         <input type="text" name="letter" value="" placeholder="Enter your guess" autofocus>

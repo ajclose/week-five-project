@@ -13,6 +13,7 @@ let word;
 let lettersGuessed = []
 let inWord = false
 let errors;
+let displayMessage;
 
 function generateGuess(wordLength) {
   let guess = []
@@ -21,6 +22,38 @@ function generateGuess(wordLength) {
   }
   return guess.join('')
 }
+
+function wasLetterGuessed(guessLetter, lettersGuessed) {
+  for (var i = 0; i < lettersGuessed.length; i++) {
+    const letter = lettersGuessed[i]
+    if (letter === guessLetter) {
+      return true
+    }
+  }
+  return false
+}
+
+function checkGuess(word, guess, guessLetter) {
+  const letters = word.split('')
+  const updateGuess = guess.split(' ')
+  for (var i = 0; i < letters.length; i++) {
+    const letter = letters[i]
+    if (letter === guessLetter) {
+      updateGuess[i] = guessLetter
+      inWord = true
+    }
+  }
+  if (!inWord) {
+    guessesLeft -= 1
+  }
+  inWord = false
+  return updateGuess.join(' ')
+}
+
+function checkWinner(word, guess) {
+  return word === guess.split(' ').join('')
+}
+
 
 app.set('view engine', 'mustache')
 app.engine('mustache', mustache())
@@ -45,49 +78,58 @@ app.get('/', function(req, res) {
       sess.word = word
       guess = generateGuess(word.length)
   }
-  if(errors) {
     res.render('index', {
         word: sess.word,
         guess: guess,
         guessesLeft: guessesLeft,
         lettersGuessed: lettersGuessed,
-        errors: errors[0]
+        displayMessage: displayMessage
       })
-  } else {
-    res.render('index', {
-        word: sess.word,
-        guess: guess,
-        guessesLeft: guessesLeft,
-        lettersGuessed: lettersGuessed
-      })
-  }
-
   })
 
 app.post('/checkguess', function(req, res) {
   const guessLetter = req.body.letter.toUpperCase()
+  displayMessage = ''
   req.checkBody('letter', 'Please enter a letter').len(1,1).isAlpha()
   errors = req.validationErrors()
-  console.log(errors[0].msg);
-  lettersGuessed.push(guessLetter)
-  const letters = word.split('')
-  const updateGuess = guess.split(' ')
-  if (guessesLeft) {
-    for (var i = 0; i < letters.length; i++) {
-      const letter = letters[i]
-      if (letter === guessLetter) {
-        updateGuess[i] = guessLetter
-        inWord = true
+  if (!errors) {
+    if (guessesLeft) {
+      if (wasLetterGuessed(guessLetter, lettersGuessed)) {
+        displayMessage = "You already guessed that letter"
+      } else {
+        lettersGuessed.push(guessLetter)
+        guess = checkGuess(word, guess, guessLetter)
+        if (checkWinner(word, guess)) {
+          displayMessage = 'You won!'
+        }
       }
+    } else {
+      displayMessage = "You're out of guesses, you lose!!!"
     }
-    if (!inWord) {
-      guessesLeft -= 1
-    }
-    guess = updateGuess.join(' ')
-    inWord = false
-    res.redirect('/')
-  } else {
-    res.send("You're out of turns!")
-  }
 
+  // console.log(errors[0].msg);
+  // const letters = word.split('')
+  // const updateGuess = guess.split(' ')
+  // if (guessesLeft) {
+  //   for (var i = 0; i < letters.length; i++) {
+  //     const letter = letters[i]
+  //     if (letter === guessLetter) {
+  //       updateGuess[i] = guessLetter
+  //       inWord = true
+  //     }
+  //   }
+  //   if (!inWord) {
+  //     guessesLeft -= 1
+  //   }
+  //   guess = updateGuess.join(' ')
+  //   inWord = false
+
+  // } else {
+  //   res.send("You're out of turns!")
+  // }
+
+} else {
+  displayMessage = errors[0].msg
+}
+    res.redirect('/')
 })
