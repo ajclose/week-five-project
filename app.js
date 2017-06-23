@@ -3,6 +3,7 @@ const app = express()
 const mustache = require('mustache-express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const expressValidator = require('express-validator')
 const fs = require('fs')
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 let guessesLeft = 8
@@ -11,6 +12,7 @@ let guess;
 let word;
 let lettersGuessed = []
 let inWord = false
+let errors;
 
 function generateGuess(wordLength) {
   let guess = []
@@ -24,6 +26,7 @@ app.set('view engine', 'mustache')
 app.engine('mustache', mustache())
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator())
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
@@ -42,16 +45,30 @@ app.get('/', function(req, res) {
       sess.word = word
       guess = generateGuess(word.length)
   }
-  res.render('index', {
-      word: sess.word,
-      guess: guess,
-      guessesLeft: guessesLeft,
-      lettersGuessed: lettersGuessed
-    })
+  if(errors) {
+    res.render('index', {
+        word: sess.word,
+        guess: guess,
+        guessesLeft: guessesLeft,
+        lettersGuessed: lettersGuessed,
+        errors: errors
+      })
+  } else {
+    res.render('index', {
+        word: sess.word,
+        guess: guess,
+        guessesLeft: guessesLeft,
+        lettersGuessed: lettersGuessed
+      })
+  }
+
   })
 
 app.post('/checkguess', function(req, res) {
   const guessLetter = req.body.letter.toUpperCase()
+  req.checkBody('letter', 'Please enter 1 letter').len(1,1).isAlpha()
+  errors = req.validationErrors()
+  console.log(errors.msg);
   lettersGuessed.push(guessLetter)
   const letters = word.split('')
   const updateGuess = guess.split(' ')
