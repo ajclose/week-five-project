@@ -121,3 +121,11 @@ app.get('/reset', function(req, res) {
   lettersGuessed = []
   res.redirect('/')
 })
+
+app.get('/results', function(req, res) {
+  sess = req.session
+  res.render('results', {
+    results: 'You won!',
+    word: word
+  })
+})
