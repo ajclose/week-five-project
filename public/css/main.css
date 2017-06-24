@@ -117,3 +117,8 @@ img {
 .leader-header {
   padding: 20px;
 }
+
+.join-leaders {
+  display: flex;
+  flex-direction: column;
+}
