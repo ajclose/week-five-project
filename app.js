@@ -135,3 +135,8 @@ app.get('/results', function(req, res) {
     word: word
   })
 })
+
+app.get('/leaderboard', function(req, res) {
+  sess = req.session
+  res.render('leaderboard')
+})
