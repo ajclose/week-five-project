@@ -52,9 +52,15 @@ function checkGuess(word, guess, guessLetter) {
 
 function checkWinner(word, guess) {
   if (guessesLeft) {
-    return word === guess.split(' ').join('')
+    if (word === guess.split(' ').join('')) {
+      results = 'You won!'
+      return true
+    } else {
+      return false
+    }
   } else {
-    displayMessage = "You're out of guesses, you lose!!!"
+    results = 'You lost!'
+    return true
   }
 }
 
@@ -104,7 +110,7 @@ app.post('/checkguess', function(req, res) {
         lettersGuessed.push(guessLetter)
         guess = checkGuess(word, guess, guessLetter)
         if (checkWinner(word, guess)) {
-          displayMessage = 'You won!'
+          return res.redirect('/results')
         }
       }
     }
@@ -125,7 +131,7 @@ app.get('/reset', function(req, res) {
 app.get('/results', function(req, res) {
   sess = req.session
   res.render('results', {
-    results: 'You won!',
+    results: results,
     word: word
   })
 })
