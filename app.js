@@ -51,7 +51,11 @@ function checkGuess(word, guess, guessLetter) {
 }
 
 function checkWinner(word, guess) {
-  return word === guess.split(' ').join('')
+  if (guessesLeft) {
+    return word === guess.split(' ').join('')
+  } else {
+    displayMessage = "You're out of guesses, you lose!!!"
+  }
 }
 
 
@@ -103,40 +107,17 @@ app.post('/checkguess', function(req, res) {
           displayMessage = 'You won!'
         }
       }
-    } else {
-      displayMessage = "You're out of guesses, you lose!!!"
     }
-
-  // console.log(errors[0].msg);
-  // const letters = word.split('')
-  // const updateGuess = guess.split(' ')
-  // if (guessesLeft) {
-  //   for (var i = 0; i < letters.length; i++) {
-  //     const letter = letters[i]
-  //     if (letter === guessLetter) {
-  //       updateGuess[i] = guessLetter
-  //       inWord = true
-  //     }
-  //   }
-  //   if (!inWord) {
-  //     guessesLeft -= 1
-  //   }
-  //   guess = updateGuess.join(' ')
-  //   inWord = false
-
-  // } else {
-  //   res.send("You're out of turns!")
-  // }
-
-} else {
-  displayMessage = errors[0].msg
-}
-    res.redirect('/')
+  } else {
+    displayMessage = errors[0].msg
+  }
+  res.redirect('/')
 })
 
 app.get('/reset', function(req, res) {
   sess = req.session
   sess.word = ''
   guessesLeft = 8
+  lettersGuessed = []
   res.redirect('/')
 })
