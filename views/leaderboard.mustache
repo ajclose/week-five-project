@@ -9,24 +9,25 @@
     <div class="container">
       <h1>LeaderBoard</h1>
       <div class="headers">
-        <div class="header">
+        <div class="leader-image">
 
         </div>
-        <div class="header">
+        <div class="leader-name">
           Name
         </div>
-        <div class="header">
+        <div class="leader-guesses">
           Guesses Left
         </div>
-        <div class="header">
+        <div class="leader-date">
           Date
         </div>
       </div>
       {{#leaders}}
       <div class="leader">
         <div class="leader-image">
-          <img src="{{image}}" alt="">
+                  <img class="leader-image" src="{{image}}" alt="">
         </div>
+
         <div class="leader-name">
           {{name}}
         </div>
