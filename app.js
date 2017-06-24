@@ -14,7 +14,7 @@ let lettersGuessed = []
 let inWord = false
 let errors;
 let displayMessage;
-let leaders = [{image: '/uploads/bailey.jpg' , name: 'Bailey', guessesLeft: 8, date: 'June 12, 2017'}]
+let leaders = [{image: '/uploads/bailey.jpg' , name: 'Bailey', guessesLeft: 8, date: '6/12/2017'}, {image: '/uploads/sticky.png', name: 'Sticky', guessesLeft: 1, date: '6/24/2017'}]
 
 function generateGuess(wordLength) {
   let guess = []
@@ -63,6 +63,12 @@ function checkWinner(word, guess) {
     results = 'You lost!'
     return true
   }
+}
+
+function sortLeaders(leaders){
+  leaders.sort(function(a,b) {
+    return b.guessesLeft - a.guessesLeft
+  })
 }
 
 
@@ -137,14 +143,16 @@ app.get('/results', function(req, res) {
   })
 })
 
-app.get('/leaderboard', function(req, res) {
+app.post('/leaderboard', function(req, res) {
   sess = req.session
+  const leaderName = req.body.name
   const date = new Date()
-  const month = date.getMonth()
+  const month = date.getMonth() + 1
   const day = date.getDate()
   const year = date.getFullYear()
-  const fullDate = `${month} ${day}, ${year}`
-  console.log(date.toDateString());
+  const fullDate = `${month}/${day}/${year}`
+  leaders.push({image: '', name: leaderName, guessesLeft: guessesLeft, date: fullDate})
+  sortLeaders(leaders)
   res.render('leaderboard', {
     leaders: leaders
   })

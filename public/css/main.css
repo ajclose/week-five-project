@@ -12,12 +12,11 @@ body {
 }
 
 img {
-  width: 100%;
+  max-width: 100%;
 }
 
 .container {
   width: 60%;
-  border: 2px solid black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -73,11 +72,12 @@ img {
 .headers {
   display: flex;
   width: 100%;
+  padding: 0 20px 10px 20px;
   align-items: center;
   justify-content: space-around;
-  padding: 20px;
   font-size: 20px;
   font-weight: bold;
+  border-bottom: 2px solid black;
 }
 
 .leader {
@@ -87,15 +87,13 @@ img {
   width: 100%;
   padding: 20px;
   font-size: 18px;
-  border: solid;
-  height: 100px;
+  height: 150px;
   overflow: hidden;
   margin: 20px 0;
 }
 
 .leader-image {
   flex-basis: 15%;
-  border: 2px solid blue;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -103,12 +101,19 @@ img {
 
 .leader-name {
   flex-basis: 23%;
+  text-align: center;
 }
 
 .leader-guesses {
   flex-basis: 23%;
+  text-align: center;
 }
 
 .leader-date {
   flex-basis: 23%;
+  text-align: center;
+}
+
+.leader-header {
+  padding: 20px;
 }

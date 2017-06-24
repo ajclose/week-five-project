@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>LeaderBoard</h1>
+      <h1 class="leader-header">LeaderBoard</h1>
       <div class="headers">
         <div class="leader-image">
 
@@ -24,10 +24,16 @@
       </div>
       {{#leaders}}
       <div class="leader">
+        {{#image}}
         <div class="leader-image">
-                  <img class="leader-image" src="{{image}}" alt="">
+          <img class="leader-image" src="{{image}}" alt="">
         </div>
-
+        {{/image}}
+        {{^image}}
+        <div class="leader-image">
+          <img class="leader-image" src="https://www.placecage.com/c/200/300" alt="">
+        </div>
+        {{/image}}
         <div class="leader-name">
           {{name}}
         </div>
