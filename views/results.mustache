@@ -2,15 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>{{results}}</title>
+    <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
+    <div class="container">
+      <h1 class="title">
+        Mystery Word Game
+      </h1>
     <div class="results-message">
       {{results}}
     </div>
     <div class="word">
       The word was {{word}}
     </div>
-    <a href="/reset">Play again!</a>
+    <a class="play-again" href="/reset">Play again!</a>
+
+  </div>
   </body>
 </html>
