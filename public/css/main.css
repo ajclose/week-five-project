@@ -8,6 +8,7 @@ body {
   display: flex;
   justify-content: center;
   padding: 20px;
+  background-color: #FAFAFA;
 }
 
 .container {
@@ -16,6 +17,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #E3F2FD;
+  color: #4E3D42;
 }
 
 .title {
@@ -25,8 +28,40 @@ body {
 .word-guess {
   font-size: 50px;
   margin: 10px;
+  color: #ABC8C0;
+  padding: 50px;
 }
 
 .guess {
   margin: 10px;
+}
+
+.message {
+  color: #DB5461;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.guessed-letters {
+  font-size: 30px;
+}
+
+.results-message {
+  font-size: 50px;
+  margin: 20px;
+}
+
+.word {
+  font-size: 40px;
+  margin: 20px;
+}
+
+.play-again {
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  margin: 50px;
+  text-decoration: none;
+  font-size: 20px;
+  background-color: #9EE493;
 }
