@@ -139,6 +139,12 @@ app.get('/results', function(req, res) {
 
 app.get('/leaderboard', function(req, res) {
   sess = req.session
+  const date = new Date()
+  const month = date.getMonth()
+  const day = date.getDate()
+  const year = date.getFullYear()
+  const fullDate = `${month} ${day}, ${year}`
+  console.log(date.toDateString());
   res.render('leaderboard', {
     leaders: leaders
   })
