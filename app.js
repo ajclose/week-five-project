@@ -14,6 +14,7 @@ let lettersGuessed = []
 let inWord = false
 let errors;
 let displayMessage;
+let leaders = [{image: '/uploads/bailey.jpg' , name: 'Bailey', guessesLeft: 8, date: 'June 12, 2017'}]
 
 function generateGuess(wordLength) {
   let guess = []
@@ -138,5 +139,7 @@ app.get('/results', function(req, res) {
 
 app.get('/leaderboard', function(req, res) {
   sess = req.session
-  res.render('leaderboard')
+  res.render('leaderboard', {
+    leaders: leaders
+  })
 })

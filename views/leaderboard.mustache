@@ -16,7 +16,14 @@
             <th>Guesses Left</th>
             <th>Date</th>
           </tr>
-
+          {{#leaders}}
+          <tr>
+            <td><img src="{{image}}" alt=""></td>
+            <td>{{name}}</td>
+            <td>{{guessesLeft}}</td>
+            <td>{{date}}</td>
+          </tr>
+          {{/leaders}}
         </thead>
       </table>
     </div>
