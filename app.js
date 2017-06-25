@@ -16,6 +16,7 @@ let lettersGuessed = []
 let inWord = false
 let errors;
 let displayMessage;
+let winner = false
 let leaderName
 let leaders = [{image: 'bailey.jpg' , name: 'Bailey', guessesLeft: 8, date: '6/12/2017'}, {image: 'sticky.png', name: 'Sticky', guessesLeft: 1, date: '6/24/2017'}]
 
@@ -58,6 +59,7 @@ function checkWinner(word, guess) {
   if (guessesLeft) {
     if (word === guess.split(' ').join('')) {
       results = 'You won!'
+      winner = true
       return true
     } else {
       return false
@@ -121,6 +123,7 @@ app.post('/checkguess', function(req, res) {
         lettersGuessed.push(guessLetter)
         guess = checkGuess(word, guess, guessLetter)
         if (checkWinner(word, guess)) {
+          console.log(winner);
           return res.redirect('/results')
         }
       }
@@ -136,6 +139,7 @@ app.get('/reset', function(req, res) {
   sess.word = ''
   guessesLeft = 8
   lettersGuessed = []
+  winner = false
   res.redirect('/')
 })
 
@@ -143,7 +147,8 @@ app.get('/results', function(req, res) {
   sess = req.session
   res.render('results', {
     results: results,
-    word: word
+    word: word,
+    winner: winner
   })
 })
 
@@ -157,26 +162,9 @@ app.post('/leaderboard', function(req, res) {
   const year = date.getFullYear()
   const fullDate = `${month}/${day}/${year}`
   let imageLocation
-//
-//   busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
 
-//       console.log('file saved');
-//      });
-//
-//
-//
-//      busboy.on('finish', function() {
-//   console.log('Upload complete');
-//   leaderName = req.body.name
-//   console.log(req.body);
-//   leaders.push({image: imageLocation, name: leaderName, guessesLeft: guessesLeft, date: fullDate})
-//   sortLeaders(leaders)
-//   res.render('leaderboard', {
-//     leaders: leaders
-//   })
-// });
+  console.log(winner);
 
-// test
 
 busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
   if (filename) {
@@ -211,14 +199,5 @@ busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
     });
     req.pipe(busboy);
 
-    // TEST
-
-
-// busboy.on('finish', function() {
-//      console.log('Done parsing form!');
-//      res.end();
-//    });
-
-// req.pipe(busboy)
 
 })
