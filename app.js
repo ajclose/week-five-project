@@ -179,14 +179,19 @@ app.post('/leaderboard', function(req, res) {
 // test
 
 busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-  var saveTo = path.join('./public/uploads/', path.basename(filename));
-  imageLocation = filename
-  file.pipe(fs.createWriteStream(saveTo));
+  if (filename) {
+    var saveTo = path.join('./public/uploads/', path.basename(filename));
+    imageLocation = filename
+    file.pipe(fs.createWriteStream(saveTo));
 
       file.on('end', function() {
         console.log('File [' + fieldname + '] Finished');
       });
+    } else {
+      file.resume()
+    }
     });
+
     busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
       if (fieldname === 'name') {
         leaderName = val
