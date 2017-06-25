@@ -123,7 +123,6 @@ app.post('/checkguess', function(req, res) {
         lettersGuessed.push(guessLetter)
         guess = checkGuess(word, guess, guessLetter)
         if (checkWinner(word, guess)) {
-          console.log(winner);
           return res.redirect('/results')
         }
       }
@@ -163,8 +162,6 @@ app.post('/leaderboard', function(req, res) {
   const fullDate = `${month}/${day}/${year}`
   let imageLocation
 
-  console.log(winner);
-
 
 busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
   if (filename) {
@@ -173,7 +170,6 @@ busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
     file.pipe(fs.createWriteStream(saveTo));
 
       file.on('end', function() {
-        console.log('File [' + fieldname + '] Finished');
       });
     } else {
       file.resume()
@@ -184,13 +180,8 @@ busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
       if (fieldname === 'name') {
         leaderName = val
       }
-
-      console.log('leadername', leaderName);
     });
     busboy.on('finish', function() {
-      console.log('Done parsing form!');
-      // res.writeHead(303, { Connection: 'close', Location: '/leaderboard' });
-      // res.end();
       leaders.push({image: imageLocation, name: leaderName, guessesLeft: guessesLeft, date: fullDate})
       sortLeaders(leaders)
       res.render('leaderboard', {
@@ -198,6 +189,4 @@ busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
       })
     });
     req.pipe(busboy);
-
-
 })
