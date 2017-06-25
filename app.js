@@ -4,7 +4,8 @@ const mustache = require('mustache-express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
-const busboy = require('busboy')
+const Busboy = require('busboy')
+const path = require('path')
 const fs = require('fs')
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 let guessesLeft = 8
@@ -15,7 +16,8 @@ let lettersGuessed = []
 let inWord = false
 let errors;
 let displayMessage;
-let leaders = [{image: '/uploads/bailey.jpg' , name: 'Bailey', guessesLeft: 8, date: '6/12/2017'}, {image: '/uploads/sticky.png', name: 'Sticky', guessesLeft: 1, date: '6/24/2017'}]
+let leaderName
+let leaders = [{image: 'bailey.jpg' , name: 'Bailey', guessesLeft: 8, date: '6/12/2017'}, {image: 'sticky.png', name: 'Sticky', guessesLeft: 1, date: '6/24/2017'}]
 
 function generateGuess(wordLength) {
   let guess = []
@@ -77,6 +79,7 @@ app.set('view engine', 'mustache')
 app.engine('mustache', mustache())
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(session({
   secret: 'keyboard cat',
@@ -146,15 +149,71 @@ app.get('/results', function(req, res) {
 
 app.post('/leaderboard', function(req, res) {
   sess = req.session
-  const leaderName = req.body.name
+  var busboy = new Busboy({ headers: req.headers });
+
   const date = new Date()
   const month = date.getMonth() + 1
   const day = date.getDate()
   const year = date.getFullYear()
   const fullDate = `${month}/${day}/${year}`
-  leaders.push({image: '', name: leaderName, guessesLeft: guessesLeft, date: fullDate})
-  sortLeaders(leaders)
-  res.render('leaderboard', {
-    leaders: leaders
-  })
+  let imageLocation
+//
+//   busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+
+//       console.log('file saved');
+//      });
+//
+//
+//
+//      busboy.on('finish', function() {
+//   console.log('Upload complete');
+//   leaderName = req.body.name
+//   console.log(req.body);
+//   leaders.push({image: imageLocation, name: leaderName, guessesLeft: guessesLeft, date: fullDate})
+//   sortLeaders(leaders)
+//   res.render('leaderboard', {
+//     leaders: leaders
+//   })
+// });
+
+// test
+
+busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+  var saveTo = path.join('./public/uploads/', path.basename(filename));
+  imageLocation = filename
+  file.pipe(fs.createWriteStream(saveTo));
+
+      file.on('end', function() {
+        console.log('File [' + fieldname + '] Finished');
+      });
+    });
+    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
+      if (fieldname === 'name') {
+        leaderName = val
+      }
+
+      console.log('leadername', leaderName);
+    });
+    busboy.on('finish', function() {
+      console.log('Done parsing form!');
+      // res.writeHead(303, { Connection: 'close', Location: '/leaderboard' });
+      // res.end();
+      leaders.push({image: imageLocation, name: leaderName, guessesLeft: guessesLeft, date: fullDate})
+      sortLeaders(leaders)
+      res.render('leaderboard', {
+        leaders: leaders
+      })
+    });
+    req.pipe(busboy);
+
+    // TEST
+
+
+// busboy.on('finish', function() {
+//      console.log('Done parsing form!');
+//      res.end();
+//    });
+
+// req.pipe(busboy)
+
 })
