@@ -17,8 +17,21 @@ let inWord = false
 let errors;
 let displayMessage;
 let winner = false
-let leaderName
-let leaders = [{image: 'bailey.jpg' , name: 'Bailey', guessesLeft: 8, date: '6/12/2017'}, {image: 'sticky.png', name: 'Sticky', guessesLeft: 1, date: '6/24/2017'}]
+let leaderName;
+let difficulty;
+let difficultyValue;
+let leaders = [{image: 'bailey.jpg' , name: 'Bailey', difficultyValue: 1, difficulty: 'Hard', guessesLeft: 8, date: '6/12/2017'}, {image: 'sticky.png', name: 'Sticky', difficultyValue: 3, difficulty: 'Easy', guessesLeft: 1, date: '6/24/2017'}]
+
+function generateWord(words, max, min) {
+  let foundWord = false
+  while (!foundWord) {
+    const randomIndex = Math.floor(Math.random()*(words.length-1))
+    if (words[randomIndex].length >= min && words[randomIndex].length <=max) {
+      word = words[randomIndex].toUpperCase()
+      foundWord = true
+    }
+  }
+}
 
 function generateGuess(wordLength) {
   let guess = []
@@ -72,7 +85,11 @@ function checkWinner(word, guess) {
 
 function sortLeaders(leaders){
   leaders.sort(function(a,b) {
-    return b.guessesLeft - a.guessesLeft
+    if (b.difficultyValue === a.difficultyValue) {
+      return b.guessesLeft - a.guessesLeft
+    }
+    return a.difficultyValue - b.difficultyValue
+
   })
 }
 
@@ -95,12 +112,12 @@ app.listen(3000, function() {
 
 app.get('/', function(req, res) {
   sess = req.session
-  if (!sess.word) {
-      const randomIndex = Math.floor(Math.random()*(words.length-1))
-      word = words[randomIndex].toUpperCase()
-      sess.word = word
-      guess = generateGuess(word.length)
-  }
+  // if (!sess.word) {
+  //     const randomIndex = Math.floor(Math.random()*(words.length-1))
+  //     word = words[randomIndex].toUpperCase()
+  //     sess.word = word
+  //     guess = generateGuess(word.length)
+  // }
     res.render('index', {
         word: sess.word,
         guess: guess,
@@ -108,6 +125,45 @@ app.get('/', function(req, res) {
         lettersGuessed: lettersGuessed,
         displayMessage: displayMessage
       })
+  })
+
+  app.get('/easy', function(req, res) {
+    sess = req.session
+    if (!sess.word) {
+      generateWord(words, 6, 4)
+      sess.word = word
+      guess = generateGuess(word.length)
+      difficulty = 'Easy'
+      difficultyValue = 3
+    }
+
+    res.redirect('/')
+  })
+
+  app.get('/normal', function(req, res) {
+    sess = req.session
+    if (!sess.word) {
+      generateWord(words, 8, 6)
+      sess.word = word
+      guess = generateGuess(word.length)
+      difficulty = 'Normal'
+      difficultyValue = 2
+    }
+
+    res.redirect('/')
+  })
+
+  app.get('/hard', function(req, res) {
+    sess = req.session
+    if (!sess.word) {
+      generateWord(words, 1000, 8)
+      sess.word = word
+      guess = generateGuess(word.length)
+      difficulty = 'Hard'
+      difficultyValue = 1
+    }
+
+    res.redirect('/')
   })
 
 app.post('/checkguess', function(req, res) {
@@ -136,6 +192,7 @@ app.post('/checkguess', function(req, res) {
 app.get('/reset', function(req, res) {
   sess = req.session
   sess.word = ''
+  guess = ''
   guessesLeft = 8
   lettersGuessed = []
   winner = false
@@ -182,8 +239,9 @@ busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
       }
     });
     busboy.on('finish', function() {
-      leaders.push({image: imageLocation, name: leaderName, guessesLeft: guessesLeft, date: fullDate})
+      leaders.push({image: imageLocation, name: leaderName, difficultyValue: difficultyValue, difficulty: difficulty, guessesLeft: guessesLeft, date: fullDate})
       sortLeaders(leaders)
+      console.log(leaders);
       res.render('leaderboard', {
         leaders: leaders
       })
