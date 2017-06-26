@@ -129,6 +129,7 @@ app.get('/', function(req, res) {
 
   app.get('/easy', function(req, res) {
     sess = req.session
+    displayMessage = ''
     if (!sess.word) {
       generateWord(words, 5, 3)
       sess.word = word
@@ -142,6 +143,7 @@ app.get('/', function(req, res) {
 
   app.get('/normal', function(req, res) {
     sess = req.session
+    displayMessage = ''
     if (!sess.word) {
       generateWord(words, 8, 6)
       sess.word = word
@@ -155,6 +157,7 @@ app.get('/', function(req, res) {
 
   app.get('/hard', function(req, res) {
     sess = req.session
+    displayMessage = ''
     if (!sess.word) {
       generateWord(words, 1000, 9)
       sess.word = word
@@ -169,6 +172,10 @@ app.get('/', function(req, res) {
 app.post('/checkguess', function(req, res) {
   const guessLetter = req.body.letter.toUpperCase()
   displayMessage = ''
+  if (!difficulty) {
+    displayMessage = "Please select a difficulty!"
+    return res.redirect('/')
+  }
   req.checkBody('letter', 'Please enter a letter').len(1,1).isAlpha()
   errors = req.validationErrors()
   if (!errors) {
@@ -196,6 +203,7 @@ app.get('/reset', function(req, res) {
   guessesLeft = 8
   lettersGuessed = []
   winner = false
+  difficulty = ''
   res.redirect('/')
 })
 

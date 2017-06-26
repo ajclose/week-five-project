@@ -20,10 +20,10 @@
     <form class="join-leaders" action="/leaderboard" method="post" enctype="multipart/form-data">
 
         <legend>Join our leaderboard!</legend>
-        <input type="text" name="name" value="" placeholder="Enter your name">
+        <input class="name-input" type="text" name="name" value="" placeholder="Enter your name">
         <label for="image">Upload an image (optional)</label>
-        <input type="file" name="image" value="">
-        <input type="submit" name="submit" value="Submit!">
+        <input id="image" class="file-input" type="file" name="image" value="">
+        <input class="leaderboard-button" type="submit" name="submit" value="Submit!">
 
     </form>
     {{/winner}}
