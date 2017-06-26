@@ -130,7 +130,7 @@ app.get('/', function(req, res) {
   app.get('/easy', function(req, res) {
     sess = req.session
     if (!sess.word) {
-      generateWord(words, 6, 4)
+      generateWord(words, 5, 3)
       sess.word = word
       guess = generateGuess(word.length)
       difficulty = 'Easy'
@@ -156,7 +156,7 @@ app.get('/', function(req, res) {
   app.get('/hard', function(req, res) {
     sess = req.session
     if (!sess.word) {
-      generateWord(words, 1000, 8)
+      generateWord(words, 1000, 9)
       sess.word = word
       guess = generateGuess(word.length)
       difficulty = 'Hard'

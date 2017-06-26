@@ -15,7 +15,7 @@
         You have {{guessesLeft}} guesses left
       </h3>
       <div class="word-guess">
-        {{word}}
+        <!-- {{word}} -->
         {{guess}}
       </div>
       <div class="message">
@@ -30,11 +30,13 @@
       </div>
       <div class="choose-difficulty">
         <h3>Choose your difficulty:</h3>
-        <a class="difficulty" href="/easy">Easy</a>
+        <div class="difficulty-buttons">
+          <a class="difficulty" href="/easy">Easy</a>
         <a class="difficulty" href="/normal">Normal</a>
         <a class="difficulty" href="/hard">Hard</a>
+        </div>
       </div>
-      <a href="/reset">Play again!</a>
+      <!-- <a href="/reset">Play again!</a> -->
     </div>
   </body>
 </html>
