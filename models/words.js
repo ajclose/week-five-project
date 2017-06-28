@@ -1,17 +1,6 @@
 const fs = require('fs')
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
-let guessesLeft = 8
-// let sess;
-// let guess;
-// let word;
-// let lettersGuessed = []
 let inWord
-// let errors;
-// let displayMessage;
-// let winner = false
-// let leaderName;
-// let difficulty;
-// let difficultyValue;
 let leaders = [{image: 'bailey.jpg' , name: 'Bailey', difficultyValue: 1, difficulty: 'Hard', guessesLeft: 8, date: '6/12/2017'}, {image: 'sticky.png', name: 'Sticky', difficultyValue: 3, difficulty: 'Easy', guessesLeft: 1, date: '6/24/2017'}]
 
 function generateWord(words, max, min) {
@@ -44,7 +33,7 @@ function wasLetterGuessed(guessLetter, lettersGuessed) {
   return false
 }
 
-function checkGuess(word, guess, guessLetter) {
+function checkGuess(word, guess, guessLetter, guessesLeft) {
   const letters = word.split('')
   const updateGuess = guess.split(' ')
   inWord = false
@@ -65,7 +54,7 @@ function isInWord() {
   return inWord
 }
 
-function checkWinner(word, guess) {
+function checkWinner(word, guess, guessesLeft) {
   if (guessesLeft) {
     if (word === guess.split(' ').join('')) {
       results = 'You won!'
@@ -99,7 +88,6 @@ module.exports = {
   checkWinner: checkWinner,
   words: words,
   leaders: leaders,
-  guessesLeft: guessesLeft,
   isInWord: isInWord,
   sortLeaders: sortLeaders
 }

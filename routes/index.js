@@ -10,10 +10,8 @@ let sess;
 let guess;
 let word;
 let lettersGuessed = []
-// let inWord = false
 let errors;
 let displayMessage;
-// let winner = false
 let leaderName;
 let difficulty;
 let difficultyValue;
@@ -95,12 +93,11 @@ router.get('/', function(req, res) {
           displayMessage = "You already guessed that letter"
         } else {
           lettersGuessed.push(guessLetter)
-          guess = words.checkGuess(word, guess, guessLetter)
+          guess = words.checkGuess(word, guess, guessLetter, guessesLeft)
           if (!words.isInWord()) {
             guessesLeft -= 1
           }
-          if (words.checkWinner(word, guess)) {
-            console.log(winner);
+          if (words.checkWinner(word, guess, guessesLeft)) {
             return res.redirect('/results')
           }
         }
@@ -147,7 +144,6 @@ router.get('/', function(req, res) {
     if (filename) {
       var saveTo = path.join('./public/uploads/', path.basename(filename));
       imageLocation = filename
-      console.log(encoding);
       file.pipe(fs.createWriteStream(saveTo));
 
         file.on('end', function() {
@@ -165,7 +161,6 @@ router.get('/', function(req, res) {
       busboy.on('finish', function() {
         leaders.push({image: imageLocation, name: leaderName, difficultyValue: difficultyValue, difficulty: difficulty, guessesLeft: guessesLeft, date: fullDate})
         words.sortLeaders(leaders)
-        console.log(leaders);
         res.render('leaderboard', {
           leaders: leaders
         })
