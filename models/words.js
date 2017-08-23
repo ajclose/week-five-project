@@ -1,5 +1,5 @@
 const fs = require('fs')
-const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+const words = fs.readFileSync("./data/words.txt", "utf-8").toLowerCase().split("\n");
 let inWord
 let leaders = [{image: 'bailey.jpg' , name: 'Bailey', difficultyValue: 1, difficulty: 'Hard', guessesLeft: 8, date: '6/12/2017'}, {image: 'sticky.png', name: 'Sticky', difficultyValue: 3, difficulty: 'Easy', guessesLeft: 1, date: '6/24/2017'}]
 
